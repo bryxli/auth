@@ -6,6 +6,8 @@ import { z } from "zod";
  */
 export const UserSchema = z.object({
   user_id: z.string(),
+  password: z.string().optional(),
+  type: z.string().optional(),
 });
 
 /**
