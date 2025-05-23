@@ -1,6 +1,7 @@
 export * as Auth from "./auth";
 import jwt from "jsonwebtoken";
 import { UserSchema } from "./types";
+import { getUserById, putUser } from "./db";
 
 import type { APIGatewayProxyEventV2 } from "aws-lambda";
 import type { User } from "./types";
@@ -55,6 +56,10 @@ export const authenticate = async (event: APIGatewayProxyEventV2) => {
 export const register = async (event: APIGatewayProxyEventV2) => {
   const user = parseUser(event.body);
 
+  let newUser: User = {
+    user_id: user.user_id,
+    password: user.password,
+  };
   const userRecord = await getUserById(user.user_id);
   if (userRecord) {
     const { password } = userRecord;
@@ -62,10 +67,11 @@ export const register = async (event: APIGatewayProxyEventV2) => {
       /* TODO: edge case: change password request */
       throw new Error("Password already exists.");
     }
+    newUser = userRecord;
+    newUser.password = user.password;
   }
 
-  /* TODO: create a password for user / new user, ensure only password is updated */
-  const registeredUser = await registerUser(user, "password");
+  const registeredUser = await putUser(newUser);
 
   return {
     user_id: registeredUser.user_id,
