@@ -1,4 +1,5 @@
-import { Api, StackContext } from "sst/constructs";
+import { Api, StackContext, use } from "sst/constructs";
+import { Dynamo } from "./DynamoStack";
 
 /**
  * Defines the API stack and its corresponding routes.
@@ -7,7 +8,15 @@ import { Api, StackContext } from "sst/constructs";
  * @returns An object containing the API construct.
  */
 export function API({ stack }: StackContext) {
+  const { users } = use(Dynamo);
+
   const api = new Api(stack, "api", {
+    defaults: {
+      function: {
+        runtime: "nodejs20.x",
+        permissions: [users],
+      },
+    },
     routes: {
       /**
        * @route GET /
