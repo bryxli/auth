@@ -6,7 +6,8 @@ import { getUserById, putUser } from "./db";
 import type { APIGatewayProxyEventV2 } from "aws-lambda";
 import type { User } from "./types";
 
-const JWT_SECRET = process.env.JWT_SECRET!;
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) throw new Error("Missing JWT_SECRET");
 
 const parseUser = (eventBody: string | undefined) => {
   const user: User = JSON.parse(eventBody || "{}");
@@ -35,7 +36,7 @@ export const authenticate = async (event: APIGatewayProxyEventV2) => {
       break;
     default:
       if (user.password !== userRecord.password) {
-        throw new Error("Invalid login.");
+        throw new Error("Invalid login");
       }
       break;
   }
@@ -64,8 +65,8 @@ export const register = async (event: APIGatewayProxyEventV2) => {
   if (userRecord) {
     const { password } = userRecord;
     if (password) {
-      /* TODO: edge case: change password request */
-      throw new Error("Password already exists.");
+      /* edge case: change password request */
+      throw new Error("Password already exists");
     }
     newUser = userRecord;
     newUser.password = user.password;
