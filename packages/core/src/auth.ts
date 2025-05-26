@@ -1,5 +1,5 @@
 export * as Auth from "./auth";
-import jwt from "jsonwebtoken";
+import * as jwt from "jsonwebtoken";
 import { UserSchema } from "./types";
 import { getUserById, putUser } from "./db";
 
@@ -32,7 +32,7 @@ export const authenticate = async (event: APIGatewayProxyEventV2) => {
 
   switch (user.type) {
     case "google":
-      /* TODO: authenticate using Google */
+      /* feature: authenticate using Google */
       break;
     default:
       if (user.password !== userRecord.password) {
@@ -74,7 +74,7 @@ export const register = async (event: APIGatewayProxyEventV2) => {
 
   const registeredUser = await putUser(newUser);
 
-  return {
-    user_id: registeredUser.user_id,
-  };
+  /* TODO: filter out sensitive information */
+
+  return registeredUser;
 };

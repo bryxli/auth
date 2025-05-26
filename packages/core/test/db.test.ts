@@ -1,10 +1,24 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { getUserById, putUser } from "../src/db";
 
 const mockUser = {
   user_id: "testid",
-  password: "foo",
+  password: "testpassword",
 };
+
+vi.mock("@aws-sdk/lib-dynamodb", () => ({
+  DynamoDBDocumentClient: {
+    from: vi.fn(() => ({
+      send: vi.fn(() => {
+        return {
+          Item: mockUser,
+        };
+      }),
+    })),
+  },
+  GetCommand: vi.fn(),
+  PutCommand: vi.fn(),
+}));
 
 describe("getUserById", () => {
   it("should return the item upon succesful retrieval", async () => {

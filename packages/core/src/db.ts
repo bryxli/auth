@@ -1,4 +1,15 @@
+import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
+import {
+  GetCommand,
+  DynamoDBDocumentClient,
+  PutCommand,
+} from "@aws-sdk/lib-dynamodb";
+
 import type { User } from "./types";
+
+const TABLE_NAME = process.env.USERS_TABLE || "dev-auth-users";
+const client = new DynamoDBClient({});
+const docClient = DynamoDBDocumentClient.from(client);
 
 /**
  * Gets a user from the DynamoDB table.
@@ -6,16 +17,17 @@ import type { User } from "./types";
  * This function queries the `users` table for an item with the given `user_id`.
  *
  * @param user_id - A `string` containing the `user_id` to search for.
- * @returns The result of the `GetCommand` operation.
+ * @returns The user item.
  */
 export async function getUserById(user_id: string) {
-  /* TODO: retrieve user from DynamoDB */
-  const res: User = {
-    user_id,
-    password: "foo",
-  };
+  const res = await docClient.send(
+    new GetCommand({
+      TableName: TABLE_NAME,
+      Key: { user_id },
+    }),
+  );
 
-  return res;
+  return res?.Item as User | undefined;
 }
 
 /**
@@ -25,13 +37,15 @@ export async function getUserById(user_id: string) {
  * If a record with the same `user_id` already exists, it will be replaced.
  *
  * @param user - A `User` object containing the data to store.
- * @returns The result of the `PutCommand` operation.
+ * @returns The user item.
  */
 export async function putUser(user: User) {
-  /* TODO: put user to DynamoDB */
-  const res: User = {
-    ...user,
-  };
+  await docClient.send(
+    new PutCommand({
+      TableName: TABLE_NAME,
+      Item: user,
+    }),
+  );
 
-  return res;
+  return user;
 }
