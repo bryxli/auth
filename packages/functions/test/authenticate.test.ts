@@ -13,7 +13,7 @@ vi.mock("@auth/core/auth", () => ({
 let mockEvent: APIGatewayProxyEventV2;
 const mockContext: Context = {} as Context;
 
-describe("Auth API", () => {
+describe("Authenticate API", () => {
   beforeEach(() => {
     vi.clearAllMocks();
 
@@ -91,7 +91,7 @@ describe("Auth API", () => {
   it("should return 401 and error when unauthorized", async () => {
     (Auth.authenticate as ReturnType<typeof vi.fn>).mockImplementationOnce(
       () => {
-        throw new Error("Not authenticated");
+        throw new Error("Invalid login");
       },
     );
 
