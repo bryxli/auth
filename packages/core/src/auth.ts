@@ -6,8 +6,7 @@ import { getUserById, putUser } from "./db";
 import type { APIGatewayProxyEventV2 } from "aws-lambda";
 import type { User } from "./types";
 
-const JWT_SECRET = process.env.JWT_SECRET;
-if (!JWT_SECRET) throw new Error("Missing JWT_SECRET");
+const JWT_SECRET = process.env.JWT_SECRET!;
 
 const parseUser = (eventBody: string | undefined) => {
   const user: User = JSON.parse(eventBody || "{}");
@@ -18,7 +17,7 @@ const parseUser = (eventBody: string | undefined) => {
 /**
  * Authenticates a user.
  *
- * @param event - The API Gateway event object containing the user_id, and any authentication values
+ * @param event - The API Gateway event object containing the user_id, and any authentication values.
  * @returns Signed JWT token.
  * @throws Error if auth fails.
  */
@@ -50,8 +49,8 @@ export const authenticate = async (event: APIGatewayProxyEventV2) => {
 /**
  * Registers a user using default credentials
  *
- * @param event - The API Gateway event object container the user_id and password
- * @returns The registered user // TODO: this should exclude sensitive data
+ * @param event - The API Gateway event object container the user_id and password.
+ * @returns The registered user.
  * @throws Error if register fails.
  */
 export const register = async (event: APIGatewayProxyEventV2) => {
