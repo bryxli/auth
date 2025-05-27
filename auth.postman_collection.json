@@ -1,0 +1,91 @@
+{
+  "info": {
+    "name": "auth",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Dev",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://9i1ocfxi5a.execute-api.us-east-1.amazonaws.com",
+              "protocol": "https",
+              "host": [
+                "9i1ocfxi5a",
+                "execute-api",
+                "us-east-1",
+                "amazonaws",
+                "com"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Authenticate",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"user_id\":\"testuser\",\r\n    \"password\":\"testpassword\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://9i1ocfxi5a.execute-api.us-east-1.amazonaws.com/authenticate",
+              "protocol": "https",
+              "host": [
+                "9i1ocfxi5a",
+                "execute-api",
+                "us-east-1",
+                "amazonaws",
+                "com"
+              ],
+              "path": ["authenticate"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Register - password (default)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"user_id\":\"testuser\",\r\n    \"password\":\"testpassword\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://9i1ocfxi5a.execute-api.us-east-1.amazonaws.com/register",
+              "protocol": "https",
+              "host": [
+                "9i1ocfxi5a",
+                "execute-api",
+                "us-east-1",
+                "amazonaws",
+                "com"
+              ],
+              "path": ["register"]
+            }
+          },
+          "response": []
+        }
+      ],
+      "description": "ApiEndpoint: [https://9i1ocfxi5a.execute-api.us-east-1.amazonaws.com](https://9i1ocfxi5a.execute-api.us-east-1.amazonaws.com)"
+    }
+  ]
+}

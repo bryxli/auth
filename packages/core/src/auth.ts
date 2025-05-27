@@ -6,7 +6,7 @@ import { getUserById, putUser } from "./db";
 import type { APIGatewayProxyEventV2 } from "aws-lambda";
 import type { User } from "./types";
 
-const JWT_SECRET = process.env.JWT_SECRET!;
+const JWT_SECRET = process.env.JWT_SECRET || "default";
 
 const parseUser = (eventBody: string | undefined) => {
   const user: User = JSON.parse(eventBody || "{}");
