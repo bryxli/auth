@@ -1,5 +1,6 @@
 import { SSTConfig } from "sst";
 import { API } from "./stacks/ApiStack";
+import { Dynamo } from "./stacks/DynamoStack";
 
 export default {
   config() {
@@ -9,6 +10,6 @@ export default {
     };
   },
   stacks(app) {
-    app.stack(API);
+    app.stack(Dynamo).stack(API);
   },
 } satisfies SSTConfig;

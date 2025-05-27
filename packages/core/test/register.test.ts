@@ -1,0 +1,61 @@
+process.env.JWT_SECRET = "test_secret";
+
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import { ZodError } from "zod";
+
+import { register } from "../src/auth";
+import * as db from "../src/utils/db";
+
+import type { APIGatewayProxyEventV2 } from "aws-lambda";
+import type { User } from "../src/utils/types";
+
+const mockGetUserById = vi.spyOn(db, "getUserById");
+const mockPutUser = vi.spyOn(db, "putUser");
+const mockUser: User = { user_id: "testuser" };
+const mockUserWithPassword: User = {
+  user_id: "testuser",
+  password: "testpassword",
+};
+const mockUserRedacted: User = { user_id: "testuser", password: "" };
+
+describe("register", () => {
+  beforeEach(() => {
+    vi.resetAllMocks();
+  });
+
+  it("should register a new user successfully", async () => {
+    mockGetUserById.mockResolvedValue(mockUser);
+    mockPutUser.mockResolvedValue(mockUserWithPassword);
+
+    const event = {
+      body: JSON.stringify(mockUserWithPassword),
+    } as APIGatewayProxyEventV2;
+
+    const user = await register(event);
+
+    expect(user).toEqual(mockUserRedacted);
+    expect(mockGetUserById).toHaveBeenCalledWith(mockUser.user_id);
+    expect(mockPutUser).toHaveBeenCalledWith(mockUser);
+  });
+
+  it("should throw an error if password already exists", async () => {
+    mockGetUserById.mockResolvedValue({
+      ...mockUser,
+      password: "testpassword",
+    });
+
+    const event = {
+      body: JSON.stringify(mockUser),
+    } as APIGatewayProxyEventV2;
+
+    await expect(() => register(event)).rejects.toThrow(
+      "Password already exists",
+    );
+  });
+
+  it("should handle undefined event body", async () => {
+    const event = {} as APIGatewayProxyEventV2;
+
+    await expect(() => register(event)).rejects.toThrow(ZodError);
+  });
+});
