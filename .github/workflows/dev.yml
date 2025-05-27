@@ -1,8 +1,7 @@
 name: Dev
 on:
-  workflow_run:
-    workflows: [Sonar]
-    types: [completed]
+  pull_request:
+    types: [opened, synchronize, reopened]
 
 concurrency:
   group: ${{ github.ref }}
@@ -13,7 +12,6 @@ permissions:
 
 jobs:
   deploy:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     environment: dev
     runs-on: ubuntu-latest
     steps:
@@ -23,11 +21,15 @@ jobs:
           role-to-assume: arn:aws:iam::${{secrets.AWS_ACCOUNT_ID}}:role/auth
           role-duration-seconds: 3600
           aws-region: ${{secrets.AWS_REGION}}
-
-      - name: Git clone the repository
+      - name: Checkout repository
         uses: actions/checkout@v4
-
+        with:
+          fetch-depth: 0
+      - name: Install dependencies
+        run: yarn
+      - name: Build
+        run: yarn build
+      - name: Unit test
+        run: yarn test
       - name: Deploy dev app
-        run: |
-          yarn
-          yarn deploy:dev
+        run: yarn deploy:dev
