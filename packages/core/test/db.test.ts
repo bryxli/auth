@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
-import { getUserById, putUser } from "../src/db";
+import { getUserById, putUser } from "../src/utils/db";
 
 const mockUser = {
   user_id: "testid",

@@ -3,10 +3,10 @@ process.env.JWT_SECRET = "test_secret";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
 import { authenticate } from "../src/auth";
-import * as db from "../src/db";
+import * as db from "../src/utils/db";
 
 import type { APIGatewayProxyEventV2 } from "aws-lambda";
-import type { User } from "../src/types";
+import type { User } from "../src/utils/types";
 
 const mockGetUserById = vi.spyOn(db, "getUserById");
 const mockUser: User = { user_id: "testuser", password: "testpassword" };

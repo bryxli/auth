@@ -4,10 +4,10 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { ZodError } from "zod";
 
 import { register } from "../src/auth";
-import * as db from "../src/db";
+import * as db from "../src/utils/db";
 
 import type { APIGatewayProxyEventV2 } from "aws-lambda";
-import type { User } from "../src/types";
+import type { User } from "../src/utils/types";
 
 const mockGetUserById = vi.spyOn(db, "getUserById");
 const mockPutUser = vi.spyOn(db, "putUser");

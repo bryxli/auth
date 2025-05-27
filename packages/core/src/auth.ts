@@ -1,10 +1,10 @@
 export * as Auth from "./auth";
 import * as jwt from "jsonwebtoken";
-import { UserSchema } from "./types";
-import { getUserById, putUser } from "./db";
+import { UserSchema } from "./utils/types";
+import { getUserById, putUser } from "./utils/db";
 
 import type { APIGatewayProxyEventV2 } from "aws-lambda";
-import type { User } from "./types";
+import type { User } from "./utils/types";
 
 const JWT_SECRET = process.env.JWT_SECRET || "default";
 
