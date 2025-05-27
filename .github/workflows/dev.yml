@@ -1,7 +1,8 @@
 name: Dev
 on:
-  pull_request:
-    types: [opened, synchronize, reopened]
+  workflow_run:
+    workflows: [Sonar]
+    types: [completed]
 
 concurrency:
   group: ${{ github.ref }}
@@ -12,6 +13,7 @@ permissions:
 
 jobs:
   deploy:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     environment: dev
     runs-on: ubuntu-latest
     steps:
