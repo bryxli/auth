@@ -1,5 +1,11 @@
 import { ZodError } from "zod";
 
+/**
+ * Handles a thrown error and returns a standardized error response.
+ *
+ * @param e - An `Error` to handle, or an unknown type.
+ * @returns The standardized error response object with a status code and body.
+ */
 export const errorHandler = (e: Error | unknown) => {
   if (e instanceof SyntaxError) {
     return {
@@ -27,13 +33,13 @@ export const errorHandler = (e: Error | unknown) => {
       body: JSON.stringify({ error: e.message }),
     };
   }
+  /* ----------------------------------------------------------------- */
   if (e instanceof Error) {
     return {
       statusCode: 500,
       body: JSON.stringify({ error: e.message }),
     };
   }
-  /* ----------------------------------------------------------------- */
   return {
     statusCode: 500,
     body: JSON.stringify({ error: "Internal Server Error" }),

@@ -25,13 +25,13 @@ export function API({ stack }: StackContext) {
       "GET /": "packages/functions/src/health.handler",
 
       /**
-       * @route POST /user/authenticate
+       * @route POST /authenticate
        * Creates a new authentication request.
        */
       "POST /authenticate": "packages/functions/src/auth.authenticate",
 
       /**
-       * @route POST /user/register
+       * @route POST /register
        * Creates a new user account using default type credentials.
        */
       "POST /register": "packages/functions/src/auth.register",
