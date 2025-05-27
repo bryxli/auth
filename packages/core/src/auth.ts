@@ -14,6 +14,13 @@ const parseUser = (eventBody: string | undefined) => {
   return user;
 };
 
+const filterResponse = (user: User) => {
+  return {
+    ...user,
+    password: undefined,
+  };
+};
+
 /**
  * Authenticates a user.
  *
@@ -73,7 +80,5 @@ export const register = async (event: APIGatewayProxyEventV2) => {
 
   const registeredUser = await putUser(newUser);
 
-  /* TODO: filter out sensitive information */
-
-  return registeredUser;
+  return filterResponse(registeredUser);
 };
