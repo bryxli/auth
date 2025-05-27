@@ -12,6 +12,11 @@ import type { User } from "../src/utils/types";
 const mockGetUserById = vi.spyOn(db, "getUserById");
 const mockPutUser = vi.spyOn(db, "putUser");
 const mockUser: User = { user_id: "testuser" };
+const mockUserWithPassword: User = {
+  user_id: "testuser",
+  password: "testpassword",
+};
+const mockUserRedacted: User = { user_id: "testuser", password: "" };
 
 describe("register", () => {
   beforeEach(() => {
@@ -20,15 +25,15 @@ describe("register", () => {
 
   it("should register a new user successfully", async () => {
     mockGetUserById.mockResolvedValue(mockUser);
-    mockPutUser.mockResolvedValue(mockUser);
+    mockPutUser.mockResolvedValue(mockUserWithPassword);
 
     const event = {
-      body: JSON.stringify(mockUser),
+      body: JSON.stringify(mockUserWithPassword),
     } as APIGatewayProxyEventV2;
 
     const user = await register(event);
 
-    expect(user).toEqual(mockUser);
+    expect(user).toEqual(mockUserRedacted);
     expect(mockGetUserById).toHaveBeenCalledWith(mockUser.user_id);
     expect(mockPutUser).toHaveBeenCalledWith(mockUser);
   });

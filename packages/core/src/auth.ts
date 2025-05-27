@@ -17,7 +17,7 @@ const parseUser = (eventBody: string | undefined) => {
 const filterResponse = (user: User) => {
   return {
     ...user,
-    password: undefined,
+    password: "",
   };
 };
 
@@ -47,7 +47,7 @@ export const authenticate = async (event: APIGatewayProxyEventV2) => {
       break;
   }
 
-  const jwtPayload = { user_id: user.user_id };
+  const jwtPayload = filterResponse(userRecord);
   const token = jwt.sign(jwtPayload, JWT_SECRET, { expiresIn: "1h" });
 
   return token;
